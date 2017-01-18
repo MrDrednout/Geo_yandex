@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.ResultSet;
 import java.util.regex.*;
 /**
  * Created by coole on 11.07.2016.
@@ -11,49 +12,54 @@ import java.util.regex.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        geo_parsing(geo_api());
+
 
         OraConnect geo = new OraConnect();
         geo.OpenConnect();
-        geo.LoadAddress();
+        ResultSet sel = geo.SQLQuery("select * from VIK_GEO_ADDRESS");
+
+        while (sel.next()) {
+            System.out.println(sel.getString("ADDRESS"));
+            String adr = sel.getString("ADDRESS");
+            Matcher m = geo_parsing(geo_api(adr));
+
+            m.find();
+            System.out.println(m.group());
+            String y = m.group();
+
+            m.find();
+            System.out.println(m.group());
+            String x = m.group();
+
+            geo.mOraUpdate(sel.getInt("id_address"), x, y);
+        }
+
+
+
         geo.mOraClose();
     }
 
-    static void geo_parsing(StringBuilder text_api) {
-        System.out.println(text_api);
+    static Matcher geo_parsing(StringBuilder text_api) {
+        //System.out.println(text_api);
         String xy = null, x=null, y=null, k=null;
         String pattern = "<pos>[a-z0-9. -]{1,20}</pos>";
 
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(text_api);
 
-        while (m.find()) {
-            xy = m.group();
-            System.out.println(xy);
-        }
+        m.find();
+        xy = m.group();
+        System.out.println(xy);
 
         String pattern2 = "\\d*[.]\\d*" ;
         Pattern p2 = Pattern.compile(pattern2);
         Matcher m2 = p2.matcher(xy);
-/*
-        while (m2.find()) {
-            k = m2.group();
-            System.out.println(k);
-        }
-*/
-        m2.find();
-        y = m2.group();
 
-        m2.find();
-        x = m2.group();
-
-        System.out.println(x);
-        System.out.println(y);
-
+        return m2;
     }
 
-    static StringBuilder geo_api() throws Exception {
-        URLConnection connection = new URL("https://geocode-maps.yandex.ru/1.x/?geocode=Москва+Константина Царева+18+118").openConnection();
+    static StringBuilder geo_api(String adr) throws Exception {
+        URLConnection connection = new URL("https://geocode-maps.yandex.ru/1.x/?geocode="+adr).openConnection();
         InputStream is = connection.getInputStream();
         InputStreamReader reader = new InputStreamReader(is);
         char[] buffer = new char[256];

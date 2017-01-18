@@ -32,15 +32,11 @@ public class OraConnect {
 
     }
 
-    public ResultSet LoadAddress() {
+    public ResultSet SQLQuery(String query) {
         ResultSet rs = null;
         try{
             Statement st = c.createStatement();//Готовим запрос
-            rs = st.executeQuery("select * from VIK_GEO_ADDRESS where ID_ADDRESS = 1");
-
-            while (rs.next()) {
-                System.out.println(rs.getString("ADDRESS"));
-            }
+            rs = st.executeQuery(query);
         } catch(Exception e){
             e.printStackTrace() ;
         }
@@ -58,6 +54,11 @@ public class OraConnect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void mOraUpdate (int id, String x, String y) throws SQLException {
+        Statement st = c.createStatement();//Готовим запрос
+        st.executeUpdate("update VIK_GEO_ADDRESS set X_FLOAT = " + x + ", Y_FLOAT = " + y + ", actual_dt = sysdate where id_address = " + id);
     }
 
 }
