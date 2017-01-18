@@ -42,7 +42,7 @@ public class OraConnect {
                 System.out.println(rs.getString("ADDRESS"));
             }
         } catch(Exception e){
-            e.printStackTrace();
+            e.printStackTrace() ;
         }
 
         return rs;
