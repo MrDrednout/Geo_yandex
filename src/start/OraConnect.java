@@ -12,9 +12,11 @@ public class OraConnect {
 
     public void OpenConnect() {
 
-        String user = "U_COLLECTOR";//Логин пользователя
-        String password = "d63wZt7TJ_KsdEmi";//Пароль пользователя
-        String url = "jdbc:oracle:thin:@172.18.17.25:1521/DWHODI";//URL адрес
+        ConnectString connectString = new ConnectString();
+
+        String user = connectString.user();//Логин пользователя
+        String password = connectString.password();//Пароль пользователя
+        String url = connectString.url();//URL адрес
         String driver = "oracle.jdbc.driver.OracleDriver"; //Имя драйвера
 
         try {
