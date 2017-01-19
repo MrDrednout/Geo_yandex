@@ -16,7 +16,7 @@ public class Main {
 
         OraConnect geo = new OraConnect();
         geo.OpenConnect();
-        ResultSet sel = geo.SQLQuery("select * from VIK_GEO_ADDRESS");
+        ResultSet sel = geo.SQLQuery("select * from VIK_GEO_ADDRESS where X_FLOAT is null");
 
         while (sel.next()) {
             System.out.println(sel.getString("ADDRESS"));
