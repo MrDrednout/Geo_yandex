@@ -58,9 +58,9 @@ public class OraConnect {
         }
     }
 
-    public void mOraUpdate (int id, String x, String y) throws SQLException {
+    public void mOraUpdate (String query) throws SQLException {
         Statement st = c.createStatement();//Готовим запрос
-        st.executeUpdate("update VIK_GEO_ADDRESS set X_FLOAT = " + x + ", Y_FLOAT = " + y + ", actual_dt = sysdate where id_address = " + id);
+        st.executeUpdate(query);
     }
 
 }

@@ -16,7 +16,7 @@ public class Main {
 
         OraConnect geo = new OraConnect();
         geo.OpenConnect();
-        ResultSet sel = geo.SQLQuery("select * from VIK_GEO_ADDRESS where X_FLOAT is null");
+        ResultSet sel = geo.SQLQuery("select * from VIK_GEO_ADDRESS where id_address = 1");
 
         while (sel.next()) {
             System.out.println(sel.getString("ADDRESS"));
@@ -31,7 +31,7 @@ public class Main {
             System.out.println(m.group());
             String x = m.group();
 
-            geo.mOraUpdate(sel.getInt("id_address"), x, y);
+            geo.mOraUpdate("update VIK_GEO_ADDRESS set X_FLOAT = " + x + ", Y_FLOAT = " + y + ", actual_dt = sysdate where id_address = " + sel.getInt("id_address"));
         }
 
 
